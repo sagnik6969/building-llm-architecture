@@ -34,6 +34,7 @@ def generate_text_simple(model, idx, max_new_tokens, context_size):
     return idx
 
 if __name__ == "__main__":
+    mps_device = torch.device("mps")
     tokenizer = tiktoken.get_encoding("gpt2")
     logging.info("Tokenizer loaded")
 
@@ -47,6 +48,7 @@ if __name__ == "__main__":
             "qkv_bias": False,  # Query-Key-Value bias
     }
     model = GPT(cfg)
+    model.to(mps_device)  # Move model to MPS device
     logging.info("Model loaded")
     start_context = "Hello, I am"
     encoded = tokenizer.encode(start_context)
