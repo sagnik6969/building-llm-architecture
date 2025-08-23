@@ -9,3 +9,31 @@ dependencies = [
     "torch>=2.8.0",
     "torchvision>=0.23.0",
 ]
+
+[dependency-groups]
+lint = [
+    "ruff>=0.12.10",
+]
+
+[tool.ruff]
+# Project-wide settings
+line-length = 88
+exclude = ["build/", "dist/", "docs/_build/",".venv/", ".vscode/", "checkpoint.pt"]
+
+[tool.ruff.lint]
+# Choose rule sets; common picks include:
+# E/F (pycodestyle/pyflakes) are default; add UP (pyupgrade), B (bugbear), I (import sorting)
+select = ["E", "F", "UP", "B", "I"]
+# Optionally ignore specific rules:
+ignore = ["E203", "E501"]
+
+# You can narrow scope, per-file ignores, etc.
+# per-file-ignores = {"tests/**.py" = ["S101"]}
+
+[tool.ruff.format]
+# Enable Ruff's formatter. You can pin line length here too, and docstring formatting options.
+# Example options; see docs for full list.
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+

@@ -1,9 +1,10 @@
 import torch
-from torch import nn, Tensor
-from type.gpt_configuration import GPTConfiguration
+from torch import Tensor, nn
+
+from feed_forward import FeedForward
 from layer_normalization import LayerNorm
 from multi_head_attention import MultiHeadAttention
-from feed_forward import FeedForward
+from type.gpt_configuration import GPTConfiguration
 
 
 class TransformerBlock(nn.Module):
@@ -33,18 +34,18 @@ class TransformerBlock(nn.Module):
         shortcut_2_output = shortcut_1_output + drop_out_output_2
 
         return shortcut_2_output
-    
+
 
 if __name__ == "__main__":
     cfg = {
-    "vocab_size": 50257,    # Vocabulary size
-    "context_length": 1024, # Context length
-    "emb_dim": 768,         # Embedding dimension
-    "n_heads": 12,          # Number of attention heads
-    "n_layers": 12,         # Number of layers
-    "drop_rate": 0.1,       # Dropout rate
-    "qkv_bias": False       # Query-Key-Value bias
-   }
+        "vocab_size": 50257,  # Vocabulary size
+        "context_length": 1024,  # Context length
+        "emb_dim": 768,  # Embedding dimension
+        "n_heads": 12,  # Number of attention heads
+        "n_layers": 12,  # Number of layers
+        "drop_rate": 0.1,  # Dropout rate
+        "qkv_bias": False,  # Query-Key-Value bias
+    }
 
     model = TransformerBlock(cfg)
     input_tensor = torch.randn(1, 1024, 768)  # (batch_size, context_length, emb_dim)

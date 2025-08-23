@@ -1,8 +1,9 @@
 import torch
-from torch import nn, Tensor
-from type.gpt_configuration import GPTConfiguration
-from transformer_block import TransformerBlock
+from torch import Tensor, nn
+
 from layer_normalization import LayerNorm
+from transformer_block import TransformerBlock
+from type.gpt_configuration import GPTConfiguration
 
 
 class GPT(nn.Module):
@@ -20,8 +21,9 @@ class GPT(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         batch_size, context_length = x.shape
         token_embeddings = self.token_embedding(x)  # Shape: (batch_size, context_length
-        positional_embeddings = self.position_embedding(torch.arange(context_length, device=x.device))
-
+        positional_embeddings = self.position_embedding(
+            torch.arange(context_length, device=x.device)
+        )
 
         x = token_embeddings + positional_embeddings
         x = self.dropout_embedding(x)
@@ -31,15 +33,16 @@ class GPT(nn.Module):
 
         return logits
 
+
 if __name__ == "__main__":
     cfg = {
-            "vocab_size": 50257,  # Vocabulary size
-            "context_length": 1024,  # Context length
-            "emb_dim": 768,  # Embedding dimension
-            "n_heads": 12,  # Number of attention heads
-            "n_layers": 12,  # Number of layers
-            "drop_rate": 0.1,  # Dropout rate
-            "qkv_bias": False,  # Query-Key-Value bias
+        "vocab_size": 50257,  # Vocabulary size
+        "context_length": 1024,  # Context length
+        "emb_dim": 768,  # Embedding dimension
+        "n_heads": 12,  # Number of attention heads
+        "n_layers": 12,  # Number of layers
+        "drop_rate": 0.1,  # Dropout rate
+        "qkv_bias": False,  # Query-Key-Value bias
     }
     model = GPT(cfg)
     inputs: Tensor = torch.randint(0, cfg["vocab_size"], (1, cfg["context_length"]))
@@ -47,6 +50,6 @@ if __name__ == "__main__":
     print(outputs.shape)
     total_params = sum(p.numel() for p in model.parameters())
     print(f"Total number of parameters: {total_params:,}")
-    total_size_bytes = total_params * 4 #A
-    total_size_mb = total_size_bytes / (1024 * 1024) #B
+    total_size_bytes = total_params * 4  # A
+    total_size_mb = total_size_bytes / (1024 * 1024)  # B
     print(f"Total size of the model: {total_size_mb:.2f} MB")

@@ -1,8 +1,10 @@
+import time
+
+import tiktoken
 import torch
 from torch import Tensor
-import tiktoken
-from torch.utils.data import Dataset, DataLoader
-import time
+from torch.utils.data import DataLoader, Dataset
+
 from gpt import GPT as GPTModel
 
 
@@ -90,7 +92,7 @@ def generate_text_simple(model, idx, max_new_tokens, context_size):
     return idx
 
 
-def generate_and_print_sample(model:GPTModel, tokenizer, device, start_context):
+def generate_and_print_sample(model: GPTModel, tokenizer, device, start_context):
     model.eval()
     context_size = model.position_embedding.weight.shape[0]
     encoded = text_to_token_ids(start_context, tokenizer).to(device)
@@ -202,7 +204,7 @@ def create_dataloader_v1(
 
 
 if __name__ == "__main__":
-    with open("dataset.txt", "r") as f:
+    with open("dataset.txt") as f:
         text_data = f.read()
 
     GPT_CONFIG_124M = {
@@ -253,9 +255,16 @@ if __name__ == "__main__":
 
     num_epochs = 30
     train_losses, val_losses, tokens_seen = train_model_simple(
-        model, train_loader, val_loader, optimizer, device,
-        num_epochs=num_epochs, eval_freq=5, eval_iter=5,
-        start_context="Every effort moves you", tokenizer=tokenizer
+        model,
+        train_loader,
+        val_loader,
+        optimizer,
+        device,
+        num_epochs=num_epochs,
+        eval_freq=5,
+        eval_iter=5,
+        start_context="Every effort moves you",
+        tokenizer=tokenizer,
     )
 
     # Note:
@@ -263,4 +272,3 @@ if __name__ == "__main__":
     end_time = time.time()
     execution_time_minutes = (end_time - start_time) / 60
     print(f"Training completed in {execution_time_minutes:.2f} minutes.")
-        
